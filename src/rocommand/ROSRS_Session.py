@@ -25,6 +25,13 @@ import ro_prefixes
 from ro_namespaces import RDF, ORE, RO, AO, ROEVO
 from ro_utils import EvoType
 
+#rpalma: FIX - reqheaders for sandbox (RODL) are set with admin authorization bearer before calling 
+#doRequestRDFFollowRedirect (4 times) to be able to assess private ROs
+#access key for sandbox instance 
+from AccessConfig import ro_access_config
+reqAccessHeaders = {
+        	'authorization' : "Bearer "+ro_access_config.RODL_ACCESS_TOKEN
+    			}
 # Logging object
 log = logging.getLogger(__name__)
 
@@ -189,7 +196,7 @@ class ROSRS_Session(HTTP_Session):
         if rouri:
             resuri = getResourceUri(rouri, resuri)
         (status, reason, headers, uri, data) = self.doRequestRDFFollowRedirect(resuri,
-            method="GET", reqheaders=reqheaders)
+            method="GET", reqheaders=reqAccessHeaders)
         if status in [200, 404]:
             return (status, reason, headers, URIRef(uri), data)
         raise self.error("Error retrieving RO RDF resource", "%03d %s (%s)"%(status, reason, resuri))
@@ -218,7 +225,7 @@ class ROSRS_Session(HTTP_Session):
         Return (status, reason, headers, uri, data), where status is 200 or 404
         """
         (status, reason, headers, uri, data) = self.doRequestRDFFollowRedirect(rouri,
-            method="GET")
+            method="GET", reqheaders=reqAccessHeaders)
         log.debug("getROManifest %s, status %d, len %d"%(uri, status, len(data or [])))
         if status in [200, 404]:
             return (status, reason, headers, URIRef(uri), data)
@@ -484,6 +491,7 @@ class ROSRS_Session(HTTP_Session):
         (or all annotations for an RO) 
         
         Returns graph of merged annotations
+        fixed (rpalma): add also the manifest annotations in the annotation graph
         """
         agraph = rdflib.graph.Graph()
         for (prefix, uri) in ro_prefixes.prefixes:
@@ -492,10 +500,16 @@ class ROSRS_Session(HTTP_Session):
         ###log.info("getROAnnotationGraph: %r"%([ str(b) for b in buris]))
         for buri in buris:
             (status, reason, headers, curi, data) = self.doRequestRDFFollowRedirect(buri, 
-                graph=agraph, exthost=True)
+                graph=agraph, reqheaders=reqAccessHeaders, exthost=True)
             log.debug("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
             if status != 200:
                 log.error("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
+        (statusMan, reasonMan, headersMan, manifesturi, manifest) = self.getROManifest(rouri)
+        (status, reason, headers, curi, data) = self.doRequestRDFFollowRedirect(manifesturi, 
+                graph=agraph, reqheaders=reqAccessHeaders, exthost=True)
+        log.debug("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
+        if status != 200:
+        	log.error("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
         return agraph
 
     def getROAnnotation(self, annuri):
