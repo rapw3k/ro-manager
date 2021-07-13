@@ -25,7 +25,7 @@ if __name__ == '__main__':
     sys.path.append("..")
     logging.basicConfig(level=logging.INFO)
 
-from uritemplate import uritemplate
+from uritemplate import URITemplate # uritemplate (original) not working in local environment Mac
 
 from rocommand.ro_namespaces import RDF, RDFS
 from rocommand.ro_annotation import annotationTypes, annotationPrefixes
@@ -257,7 +257,7 @@ def evaluate_trafficlight_json(request):
     outstr      = StringIO.StringIO()
     RdfReport.generate_report(
         TrafficLightReports.EvalChecklistJson, resultgraph, {}, outstr, RdfReport.escape_json)
-    return Response(outstr.getvalue(), content_type="application/json", vary=['accept'])
+    return Response(outstr.getvalue(), content_type="application/json; charset=utf-8", vary=['accept'])
 
 ### @view_config(route_name='trafficlight', request_method='GET', accept='text/html')
 @view_config(route_name='trafficlight_html', request_method='GET')

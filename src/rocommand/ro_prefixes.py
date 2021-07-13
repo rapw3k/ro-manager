@@ -2,9 +2,10 @@
 
 """
 Central list of prefixes commonly used with ROs
+extended to support ro model updates and extensions for earth science (01/2017) by Raul Palma
 """
 
-__author__      = "Graham Klyne (GK@ACM.ORG)"
+__authors__      = "Graham Klyne (GK@ACM.ORG), Raul Palma"
 __copyright__   = "Copyright 2011-2013, University of Oxford"
 __license__     = "MIT (http://opensource.org/licenses/MIT)"
 
@@ -20,7 +21,7 @@ prefixes = (
     , ("roterms",   "http://purl.org/wf4ever/roterms#")
     , ("wfprov",    "http://purl.org/wf4ever/wfprov#")
     , ("wfdesc",    "http://purl.org/wf4ever/wfdesc#")
-    , ("wf4ever",   "http://purl.org/wf4ever/wf4ever#")
+    , ("wf4ever",   "http://purl.org/wf4ever/wf4ever#")    
     , ("ore",       "http://www.openarchives.org/ore/terms/")
     , ("ao",        "http://purl.org/ao/")
     , ("dcterms",   "http://purl.org/dc/terms/")
@@ -28,6 +29,23 @@ prefixes = (
     , ("foaf",      "http://xmlns.com/foaf/0.1/")
     , ("minim",     "http://purl.org/minim/minim#")
     , ("result",    "http://www.w3.org/2001/sw/DataAccess/tests/result-set#")
+    , ("roes",      "http://w3id.org/ro/earth-science#")
+    , ("oa",        "http://www.w3.org/ns/oa#")
+    , ("pav",       "http://purl.org/pav/")
+    , ("swrc",      "http://swrc.ontoware.org/ontology#")
+    , ("cito",      "http://purl.org/spar/cito/")
+    , ("dbo",       "http://dbpedia.org/ontology/")
+    , ("ov",        "http://open.vocab.org/terms/")
+    , ("bibo",      "http://purl.org/ontology/bibo/")
+    , ("prov",      "http://www.w3.org/ns/prov#")
+    , ("geo",       "http://www.opengis.net/ont/geosparql#")
+    , ("sf",        "http://www.opengis.net/ont/sf#")
+    , ("gml",       "http://www.opengis.net/ont/gml#")
+    , ("odrs",      "http://schema.theodi.org/odrs#")
+    , ("cc",        "http://creativecommons.org/ns#")
+    , ("odrl",      "http://www.w3.org/ns/odrl/2/")
+    , ("geo-wgs84", "http://www.w3.org/2003/01/geo/wgs84_pos#")
+    , ("voag",      "http://voag.linkedmodel.org/schema/voag#")
     # Workaround hack until Minim prefix handling is sorted out
     , ("chembox",   "http://dbpedia.org/resource/Template:Chembox:")
     ])
