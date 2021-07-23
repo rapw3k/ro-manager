@@ -65,6 +65,10 @@ The checklist evaluation service uses the Pyramid web application development fr
 
     pip install pyramid
 
+The checklist evaluation service uses the requests package, so it should be installed: 
+
+    pip install requests
+
 To activate the checklist web service, go to the RO Manager source directory and issue the command shown:
 
     cd _workspace_/ro-manager/src
