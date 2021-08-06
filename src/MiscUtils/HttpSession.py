@@ -9,6 +9,7 @@ import httplib
 import urlparse
 import rdflib
 import logging
+import requests
 
 # Logger for this module
 log = logging.getLogger(__name__)
@@ -336,10 +337,18 @@ class HTTP_Session(object):
              status, reason(text), response headers, response graph or body
 
         """
-        (status, reason, headers, data) = self.doRequest(uripath,
-            method=method, body=body,
-            ctype=ctype, accept=ACCEPT_RDF_CONTENT_TYPES, reqheaders=reqheaders, 
-            exthost=exthost)
+        if "w3id.org/ro-id" in str(uripath):
+            if str(uripath[-1]) == "/":
+                uripath = str(uripath)[:-1]
+            # log.debug("Headers in doRequestRDF method: %s" % (reqheaders))
+            response = requests.get(str(uripath), headers=reqheaders)
+            (status, reason, headers, data) = (response.status_code,
+                                               response.reason, response.headers, response.content)
+        else:
+            (status, reason, headers, data) = self.doRequest(uripath,
+                 method=method, body=body,
+                 ctype=ctype, accept=ACCEPT_RDF_CONTENT_TYPES, reqheaders=reqheaders,
+                 exthost=exthost)
         if status >= 200 and status < 300:
             content_type = headers["content-type"].split(";",1)[0].strip().lower()
             if content_type in RDF_CONTENT_TYPES:
