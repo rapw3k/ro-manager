@@ -498,18 +498,29 @@ class ROSRS_Session(HTTP_Session):
             agraph.bind(prefix, rdflib.namespace.Namespace(uri))
         buris = set(self.getROAnnotationBodyUris(rouri, resuri))
         ###log.info("getROAnnotationGraph: %r"%([ str(b) for b in buris]))
+        ### testing time
+        start_time_all = time.time()
         for buri in buris:
+        	### testing time
+            start_time = time.time()
             (status, reason, headers, curi, data) = self.doRequestRDFFollowRedirect(buri, 
                 graph=agraph, reqheaders=reqAccessHeaders, exthost=True)
             log.debug("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
+            ### testing time
+            log.debug("TIME loading body--- %s seconds ---" % (time.time() - start_time))
             if status != 200:
                 log.error("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
+        ### testing time
+        start_time = time.time()
         (statusMan, reasonMan, headersMan, manifesturi, manifest) = self.getROManifest(rouri)
         (status, reason, headers, curi, data) = self.doRequestRDFFollowRedirect(manifesturi, 
                 graph=agraph, reqheaders=reqAccessHeaders, exthost=True)
+        ### testing time
+        log.debug("TIME loading manifest--- %s seconds ---" % (time.time() - start_time))
         log.debug("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
         if status != 200:
         	log.error("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
+        log.debug("TOTAL TIME loading --- %s seconds ---" % (time.time() - start_time_all))
         return agraph
 
     def getROAnnotation(self, annuri):

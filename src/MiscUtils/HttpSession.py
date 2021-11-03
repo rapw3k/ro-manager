@@ -10,6 +10,7 @@ import urlparse
 import rdflib
 import logging
 import requests
+import json
 
 # Logger for this module
 log = logging.getLogger(__name__)
@@ -337,28 +338,69 @@ class HTTP_Session(object):
              status, reason(text), response headers, response graph or body
 
         """
-        if "w3id.org/ro-id" in str(uripath):
-            if str(uripath[-1]) == "/":
-                uripath = str(uripath)[:-1]
-            # log.debug("Headers in doRequestRDF method: %s" % (reqheaders))
-            response = requests.get(str(uripath), headers=reqheaders)
+        w3id_prefix="w3id.org/ro-id"
+        w3id_dev_prefix="w3id.org/ro-id-dev"
+        index_endpoint="https://api.rohub.org/api/search/manifests/?identifier="
+        index_dev_endpoint="https://rohub2020-rohub.apps.paas-dev.psnc.pl/api/search/manifests/?identifier="
+        
+        if w3id_prefix in str(uripath):
+            if str(uripath[-4:]) == ".ttl":
+                if ("evo_info" in uripath or "enrichment" in uripath):
+                    r = requests.get(str(uripath)) 
+                    annotation=r.url.split("annotations/",1)[1]
+                    annotation_id=annotation.split("/download/", 1)[0]
+                    if w3id_dev_prefix in str(uripath):
+                        uripath = index_dev_endpoint+annotation_id
+                    else:
+                        uripath = index_endpoint+annotation_id
+                else:
+                    annotation=uripath.split("annotations/",1)[1]
+                    annotation_id=annotation.split(".ttl", 1)[0]
+                    if w3id_dev_prefix in str(uripath):
+                        uripath = index_dev_endpoint+annotation_id
+                    else:
+                        uripath = index_endpoint+annotation_id
+            else:
+                if str(uripath[-1]) == "/":
+                    uripath = str(uripath)[:-1]
+                if w3id_dev_prefix in str(uripath):
+                    ro_id=uripath.split("ro-id-dev/",1)[1]
+                    uripath = index_dev_endpoint+ro_id   
+                else:
+                    ro_id=uripath.split("ro-id/",1)[1]
+                    uripath = index_endpoint+ro_id   
+            
+            #(status, reason, headers, data) = self.doRequest(uripath,
+            #     method=method, body=body,
+            #     ctype=ctype, accept=ACCEPT_RDF_CONTENT_TYPES, reqheaders=reqheaders,
+            #     exthost=True)
+            #### TODO pass the reqheader with proper token to access private ROs like we did in old ROHub
+            response = requests.get(str(uripath))#, headers=reqheaders)
             (status, reason, headers, data) = (response.status_code,
                                                response.reason, response.headers, response.content)
+            output = json.loads(data)
+            data = output["results"][0]["text"]   
         else:
             (status, reason, headers, data) = self.doRequest(uripath,
                  method=method, body=body,
                  ctype=ctype, accept=ACCEPT_RDF_CONTENT_TYPES, reqheaders=reqheaders,
                  exthost=exthost)
+        
         if status >= 200 and status < 300:
             content_type = headers["content-type"].split(";",1)[0].strip().lower()
             if content_type in RDF_CONTENT_TYPES:
                 rdfgraph   = graph if graph != None else rdflib.graph.Graph()
                 baseuri    = self.getpathuri(uripath)
-                bodyformat = RDF_CONTENT_TYPES[content_type]
+                #bodyformat = RDF_CONTENT_TYPES[content_type]
+                if index_endpoint in str(uripath) or index_dev_endpoint in str(uripath):
+                    bodyformat = "turtle"
+                else:
+                    bodyformat = RDF_CONTENT_TYPES[content_type]
                 # log.debug("HTTP_Session.doRequestRDF data:\n----\n"+data+"\n------------")
                 try:
                     # rdfgraph.parse(data=data, location=baseuri, format=bodyformat)
-                    rdfgraph.parse(data=data, publicID=baseuri, format=bodyformat)
+                    # rdfgraph.parse(data=data, publicID=baseuri, format=bodyformat)
+                    rdfgraph.parse(data=data, format=bodyformat)
                     data = rdfgraph
                 except Exception, e:
                     log.info("HTTP_Session.doRequestRDF: %s"%(e))

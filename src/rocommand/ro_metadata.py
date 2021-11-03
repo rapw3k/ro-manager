@@ -33,7 +33,7 @@ import ro_manifest
 import ro_annotation
 import json
 import hashlib
-
+from rdflib import URIRef
 
 class ro_metadata(object):
     """
@@ -167,7 +167,7 @@ class ro_metadata(object):
                     annotation_uris_loaded.add(auri)
         else:
             self.roannotations = self.rosrs.getROAnnotationGraph(self.rouri)
-        # log.debug("roannotations graph:\n"+self.roannotations.serialize())
+        #log.debug("roannotations graph - printing:\n"+self.roannotations.serialize(format="turtle"))
         for (prefix, uri) in ro_prefixes.prefixes:
             self.manifestgraph.bind(prefix, rdflib.namespace.Namespace(uri))
         return self.roannotations
@@ -584,6 +584,9 @@ class ro_metadata(object):
         Returns a single annotation value for a resource and the indicated predicate,
         or None
         """
+        w3id_prefix="w3id.org/ro-id"
+        if w3id_prefix in str(resource) and str(resource[-1]) == "/":
+                resource = URIRef(str(resource)[:-1])
         return self._loadAnnotations().value(subject=resource, predicate=predicate, object=None)
 
     def showAnnotations(self, annotations, outstr):
