@@ -313,7 +313,7 @@ class HTTP_Session(object):
         return (status, reason, headers, uripath, data)
 
     def doRequestRDF(self, uripath, 
-            method="GET", body=None, ctype=None, reqheaders=None, exthost=False, graph=None):
+            method="GET", body=None, ctype=None, reqheaders=None, exthost=False, graph=None, session=None):
         """
         Perform HTTP request with RDF response.
 
@@ -345,8 +345,11 @@ class HTTP_Session(object):
         
         if w3id_prefix in str(uripath):
             if str(uripath[-4:]) == ".ttl":
-                if ("evo_info" in uripath or "enrichment" in uripath):
-                    r = requests.get(str(uripath)) 
+                if ("evo_info" in uripath or "enrichment" in uripath): 
+                    if session is None:
+                        r = requests.get(str(uripath))
+                    else:
+                        r = session.get(str(uripath)) 
                     annotation=r.url.split("annotations/",1)[1]
                     annotation_id=annotation.split("/download/", 1)[0]
                     if w3id_dev_prefix in str(uripath):
@@ -375,7 +378,10 @@ class HTTP_Session(object):
             #     ctype=ctype, accept=ACCEPT_RDF_CONTENT_TYPES, reqheaders=reqheaders,
             #     exthost=True)
             #### TODO pass the reqheader with proper token to access private ROs like we did in old ROHub
-            response = requests.get(str(uripath))#, headers=reqheaders)
+            if session is None:
+                response = requests.get(str(uripath))#, headers=reqheaders)
+            else:
+                response = session.get(str(uripath))#, headers=reqheaders)
             (status, reason, headers, data) = (response.status_code,
                                                response.reason, response.headers, response.content)
             output = json.loads(data)
@@ -414,7 +420,7 @@ class HTTP_Session(object):
         return (status, reason, headers, data)
 
     def doRequestRDFFollowRedirect(self, uripath, 
-            method="GET", body=None, ctype=None, reqheaders=None, exthost=False, graph=None):
+            method="GET", body=None, ctype=None, reqheaders=None, exthost=False, graph=None, session=None):
         """
         Perform HTTP request with RDF response, following any redirect returned
 
@@ -441,14 +447,14 @@ class HTTP_Session(object):
         (status, reason, headers, data) = self.doRequestRDF(uripath,
             method=method,
             body=body, ctype=ctype, reqheaders=reqheaders,
-            exthost=exthost, graph=graph)
+            exthost=exthost, graph=graph, session=session)
         log.debug("%03d %s from request to %s"%(status, reason, uripath))
         if status in [302,303,307]:
             uripath = headers["location"]
             (status, reason, headers, data) = self.doRequestRDF(uripath,
                 method=method,
                 body=body, ctype=ctype, reqheaders=reqheaders,
-                exthost=exthost, graph=graph)
+                exthost=exthost, graph=graph, session=session)
             log.debug("%03d %s from redirect to %s"%(status, reason, uripath))
         if status in [302,307]:
             # Allow second temporary redirect
@@ -456,7 +462,7 @@ class HTTP_Session(object):
             (status, reason, headers, data) = self.doRequestRDF(uripath,
                 method=method,
                 body=body, ctype=ctype, reqheaders=reqheaders,
-                exthost=exthost, graph=graph)
+                exthost=exthost, graph=graph, session=session)
             log.debug("%03d %s from redirect to %s"%(status, reason, uripath))
         return (status, reason, headers, uripath, data)
 
