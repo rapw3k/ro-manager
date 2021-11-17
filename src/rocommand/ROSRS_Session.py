@@ -14,6 +14,8 @@ import rdflib.graph
 import logging
 import time
 import requests
+from oauthlib.oauth2 import LegacyApplicationClient
+from requests_oauthlib import OAuth2Session
 
 from xml.dom import minidom
 from urlparse import urljoin
@@ -108,7 +110,21 @@ class ROSRS_Session(HTTP_Session):
         super(ROSRS_Session, self).__init__(srsuri, accesskey)
         self._srsuri    = srsuri
         self._session = requests.Session()
+        #self._token = self.getTokenROHub2020()
+        #self._session.headers.update({'authorization' : "Bearer "+self._token["access_token"]})
         return
+
+    def getTokenROHub2020(self):
+        oauth = OAuth2Session(client=LegacyApplicationClient(client_id=ro_access_config.rohub2020_client_id))
+        token = oauth.fetch_token(
+            token_url=ro_access_config.rohub2020_keycloak_auth_endpoint,
+            username=ro_access_config.rohub2020_username,
+            password=ro_access_config.rohub2020_password,
+            client_id=ro_access_config.rohub2020_client_id,
+            client_secret=ro_access_config.rohub2020_client_secret_key,
+        )
+        log.debug("token: "+str(token))
+        return token
 
     def close(self):
         super(ROSRS_Session, self).close()

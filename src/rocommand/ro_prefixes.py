@@ -46,6 +46,10 @@ prefixes = (
     , ("odrl",      "http://www.w3.org/ns/odrl/2/")
     , ("geo-wgs84", "http://www.w3.org/2003/01/geo/wgs84_pos#")
     , ("voag",      "http://voag.linkedmodel.org/schema/voag#")
+    , ("sch",       "https://schema.org/")
+    , ("pav",       "http://purl.org/pav/")
+    , ("rel0",       "http://w3id.org/ro/earth-science#")
+    , ("rel1",       "https://w3id.org/ro/terms/earth-science#")
     # Workaround hack until Minim prefix handling is sorted out
     , ("chembox",   "http://dbpedia.org/resource/Template:Chembox:")
     ])

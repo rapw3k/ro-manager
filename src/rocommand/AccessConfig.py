@@ -25,4 +25,9 @@ class ro_access_config:
 #    ROSRS_URI           = "http://sandbox.wf4ever-project.org/rodl/ROs/"
 #    ROSRS_ACCESS_TOKEN  = "0522a6c6-7000-43df-8"
     RODL_ACCESS_TOKEN  = "d2ZhZG1pbjp3ZmFkbWluISEh"
+    rohub2020_client_id = ""
+    rohub2020_client_secret_key = ""
+    rohub2020_keycloak_auth_endpoint = ""
+    rohub2020_username= ""
+    rohub2020_password = ""
 # End.

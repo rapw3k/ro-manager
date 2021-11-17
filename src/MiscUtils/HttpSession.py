@@ -385,7 +385,11 @@ class HTTP_Session(object):
             (status, reason, headers, data) = (response.status_code,
                                                response.reason, response.headers, response.content)
             output = json.loads(data)
-            data = output["results"][0]["text"]   
+            if not 'results' in output or len(output['results']) == 0:
+                data = ''
+                log.debug("EMPTY graph: "+str(uripath))                
+            else:
+                data = output["results"][0]["text"]
         else:
             (status, reason, headers, data) = self.doRequest(uripath,
                  method=method, body=body,
