@@ -47,6 +47,7 @@ prefixes = (
     , ("geo-wgs84", "http://www.w3.org/2003/01/geo/wgs84_pos#")
     , ("voag",      "http://voag.linkedmodel.org/schema/voag#")
     , ("sch",       "https://schema.org/")
+    , ("sch1",      "http://schema.org/")
     , ("pav",       "http://purl.org/pav/")
     , ("rel0",       "http://w3id.org/ro/earth-science#")
     , ("rel1",       "https://w3id.org/ro/terms/earth-science#")
