@@ -40,7 +40,7 @@ class ro_metadata(object):
     Class for accessing RO metadata
     """
 
-    def __init__(self, roconfig, roref, dummysetupfortest=False):
+    def __init__(self, roconfig, roref, purpose=None, dummysetupfortest=False):
         """
         Initialize: read manifest from object at given directory into local RDF graph
 
@@ -52,6 +52,7 @@ class ro_metadata(object):
         """
         self.roconfig = roconfig
         self.roref    = roref
+        self.purpose    = purpose
         self.dummyfortest  = dummysetupfortest
         self.manifestgraph = None
         self.roannotations = None
@@ -166,7 +167,7 @@ class ro_metadata(object):
                     self._readAnnotationBody(aref, self.roannotations)
                     annotation_uris_loaded.add(auri)
         else:
-            self.roannotations = self.rosrs.getROAnnotationGraph(self.rouri)
+            self.roannotations = self.rosrs.getROAnnotationGraph(rouri=self.rouri, purpose=self.purpose)
         #log.debug("roannotations graph - printing:\n"+self.roannotations.serialize(format="turtle"))
         for (prefix, uri) in ro_prefixes.prefixes:
             self.manifestgraph.bind(prefix, rdflib.namespace.Namespace(uri))

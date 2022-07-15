@@ -165,7 +165,7 @@ def real_evaluate(request):
         #"rosrs_access_token":   "ac14dd1a-ab59-40ec-b510-ffdb01a85473",
         "rosrs_access_token":   None,
         }
-    rometa = ro_metadata(ro_config, RO)
+    rometa = ro_metadata(ro_config, RO, purpose)
     log.info("rometa.rouri: %s"%(rometa.rouri) )
     # invoke evaluation service
     (graph, evalresult) = ro_eval_minim.evaluate(rometa, minim, target, purpose)

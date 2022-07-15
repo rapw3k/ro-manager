@@ -345,16 +345,28 @@ class HTTP_Session(object):
         
         if w3id_prefix in str(uripath):
             if str(uripath[-4:]) == ".ttl":
-                if ("evo_info" in uripath or "enrichment" in uripath): 
+                if ("evo_info" in uripath or "enrichment" in uripath or "folders" in uripath): 
                     if session is None:
                         r = requests.get(str(uripath))
                     else:
                         r = session.get(str(uripath)) 
-                    annotation=r.url.split("annotations/",1)[1]
+                    if ("folders" in uripath):
+                        annotation=r.url.split("folders/",1)[1]
+                    else:
+                        annotation=r.url.split("annotations/",1)[1]
                     annotation_id=annotation.split("/download/", 1)[0]
                     if w3id_dev_prefix in str(uripath):
                         uripath = index_dev_endpoint+annotation_id
                     else:
+                        uripath = index_endpoint+annotation_id
+                elif ("manifest" in uripath ):
+                    if w3id_dev_prefix in str(uripath):
+                        annotation=uripath.split(w3id_dev_prefix+"/",1)[1]
+                        annotation_id=annotation.split("/.ro/manifest.ttl", 1)[0]
+                        uripath = index_dev_endpoint+annotation_id
+                    else:
+                        annotation=uripath.split(w3id_prefix+"/",1)[1]
+                        annotation_id=annotation.split("/.ro/manifest.ttl", 1)[0]
                         uripath = index_endpoint+annotation_id
                 else:
                     annotation=uripath.split("annotations/",1)[1]
