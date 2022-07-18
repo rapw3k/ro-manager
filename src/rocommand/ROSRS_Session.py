@@ -528,7 +528,15 @@ class ROSRS_Session(HTTP_Session):
         	### testing time
             start_time = time.time()
             log.debug("GRAPH TO LOAD: %s "%(buri))
-            if (("folders" not in buri) or (("folders" in buri) and ("folder" in purpose_val))):
+            load=False
+            if ("folders" not in buri):
+                load=True
+            elif ("folder" in purpose_val):
+                if (("biblio.ttl" in buri) and ("biblio" in purpose_val)): load=True
+                elif (("data.ttl" in buri) and ("data" in purpose_val)): load=True
+                elif (("tool.ttl" in buri) and ("tool" in purpose_val)): load=True
+                elif ("all" in purpose_val): load=True
+            if (load):
                 (status, reason, headers, curi, data) = self.doRequestRDFFollowRedirect(buri, 
                     graph=agraph, reqheaders=reqAccessHeaders, exthost=True, session=self._session)
                 log.debug("getROAnnotationGraph: %03d %s reading %s"%(status, reason, buri))
