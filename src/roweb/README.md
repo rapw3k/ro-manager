@@ -16,7 +16,7 @@ The Research Object checklist evaluation service is a web server that performs c
 * `git` command line tool (depending on the installation option used).
 * Commands are tested to run in a `bash` shell environment.
 * The sample scripts and example commands are written to run in a `bash` shell environment.
-* Pyramid web application framework ([http://www.pylonsproject.org]()), installation of which is covered below.  Development and testing has ben done with Pyramid version 1.4.2, but will hopefully also work with later versions.
+* Pyramid web application framework ([http://www.pylonsproject.org]()), installation of which is covered below.  Development and testing has been done with Pyramid version 1.4.2, but will hopefully also work with later versions.
 * Various other Python packages that are located and installed by the `pip` and `setup.py` utilities.
 
 
@@ -71,8 +71,8 @@ The checklist evaluation service uses the requests package, so it should be inst
 
 To activate the checklist web service, go to the RO Manager source directory and issue the command shown:
 
-    cd _workspace_/ro-manager/src
-    source roweb/runroweb.sh
+    cd _workspace_/ro-manager/src/roweb
+    source runroweb.sh
 
 Wait for a couple of seconds, then:
 

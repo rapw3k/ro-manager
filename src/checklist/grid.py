@@ -18,6 +18,7 @@ import logging
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+
 class Grid(object):
     """
     Interface for grid or spreadsheet object.
@@ -36,7 +37,7 @@ class Grid(object):
     def resolveUri(self, uriref):
         # return ro_uriutils.resolveUri(uriref, self._baseuri)
         endswithhash = uriref.endswith("#")
-        resolveduri  = urlparse.urljoin(self._baseuri, uriref)
+        resolveduri = urlparse.urljoin(self._baseuri, uriref)
         if endswithhash and not resolveduri.endswith("#"):
             resolveduri = resolveduri + "#"
         return resolveduri
@@ -55,7 +56,7 @@ class GridRow(object):
 
     def __init__(self, grid, row):
         self._grid = grid
-        self._row  = row
+        self._row = row
         return
 
     def __getitem__(self, col):
@@ -78,14 +79,15 @@ class GridCSV(Grid):
         if not dialect:
             dialect = csv.Sniffer().sniff(csvfile.read(1024))
             csvfile.seek(0)
-        log.debug("GridCSV: %s, %s"%(csvfile, dialect))
+        logging.getLogger().debug("GridCSV: %s, %s" % (csvfile, dialect))
         reader = csv.reader(csvfile, dialect)
         self._rows   = []
         self._maxcol = 0
         for row in reader:
             # log.debug("- row: %s"%(repr(row)))
             self._rows.append(row)
-            if len(row) > self._maxcol: self._maxcol = len(row)
+            if len(row) > self._maxcol:
+                self._maxcol = len(row)
         return
 
     def cell(self, row, col):

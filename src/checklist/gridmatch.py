@@ -103,9 +103,10 @@ class GridMatchNextRow(GridMatch):
         self._t = t
         self._b = b
         return
+
     def match(self, grid, row, col):
-        (rt,(rnew,cnew)) = self._t.match(grid, row, col)
-        (rb,(rnew,cnew)) = self._b.match(grid, rnew, col)
+        (rt, (rnew, cnew)) = self._t.match(grid, row, col)
+        (rb, (rnew, cnew)) = self._b.match(grid, rnew, col)
         rt.update(rb)
         return (rt, (rnew, cnew))
 
