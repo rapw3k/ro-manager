@@ -15,14 +15,14 @@ from gridmatch import (
 
 checklist_start = value("matchtemplate", "checklist")
 
-prefix = text("") + regexval(r"\w+", "prefix") + refval("uri")
+# prefix = text("") + regexval(r"\w+", "prefix") + refval("uri")
+#
+# prefixes = (text("Prefixes:").skipdownto()
+#     // text("Prefixes:")
+#     // prefix.repeatdown("prefixes", min=1, dkey="prefix", dval="uri")
+#     )
 
-prefixes = (text("Prefixes:").skipdownto()
-    // text("Prefixes:")
-    // prefix.repeatdown("prefixes", min=1, dkey="prefix", dval="uri")
-    )
-
-checklist = text("") + regexval(r".+", "target_urit") + anyval("purpose") + refval("model")
+checklist = text("") + anyval("purpose") + refval("model")
 
 checklists = (text("Checklists:").skipdownto() 
     // text("Checklists:") 
@@ -92,7 +92,6 @@ requirements = requirement.repeatdown("requirements", min=1)
 checklist_end = text("End:").skipdownto() // text("End:")
 
 checklist = ( checklist_start
-    // prefixes
     // checklists
     // models
     // requirements

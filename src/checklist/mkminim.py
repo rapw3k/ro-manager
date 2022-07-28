@@ -51,12 +51,9 @@ def mkminim(grid, baseuri=None):
         return 2, None
     # Create RDF graph and initialize Minim graph creation
     mgr = Minim_graph(base=baseuri)
-    # Add prefixes to graph
-    for pre in d["prefixes"]:
-        mgr.prefix(pre, d["prefixes"][pre])
     # Add checklists to graph
     for cl in d["checklists"]:
-        mgr.checklist(purpose=cl["purpose"], model=cl["model"], target=cl["target_urit"])
+        mgr.checklist(purpose=cl["purpose"], model=cl["model"], target='{+targetro}')
     # Add models to graph
     for cm in d["models"]:
         mgr.model(cm["modelid"],
