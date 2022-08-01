@@ -201,7 +201,7 @@ def parseCommandArgs(argv):
     """
     # create a parser for the command line options
     parser = argparse.ArgumentParser(
-        description="Generate Minim RDF file from tabular checklist description.",
+        description="Generate Minim RDF file from tabular checklist description in xsl or csv format.",
         epilog="The RDF Graph generated is written to standard output.")
     # parser.add_argument("-a", "--all",
     #                     action="store_true",
