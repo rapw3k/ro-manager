@@ -72,7 +72,7 @@ def mkminim(grid, baseuri=None):
 
             if rq['foreach'] in mapping['foreach']:
                 rq['foreach'] = mapping['foreach'][rq['foreach']]
-            elif (rq['foreach'] not in mapping['foreach']) and (rq['foreach'][0] is not '?'):
+            elif (rq['foreach'] not in mapping['foreach']) and (rq['foreach'][0] != '?'):
                 print 'The value in foreach field is not supported'
                 return 2, None
 
@@ -89,7 +89,7 @@ def mkminim(grid, baseuri=None):
                     query = '?ro ore:aggregates [ rdf:type sch:' + rq['exists'] + '|sch1:' + rq["exists"] + ']'
                     rq['exists'] = query
                 else:
-                    if not rq['exists'][0].islower():
+                    if not rq['exists'][0].islower() and rq['exists'][0] != '?':
                         print "Property name should start with lowercase"
                         return 2, None
                     if requests.get('https://schema.org/%s' % rq['exists']).status_code is not 200:
@@ -127,7 +127,7 @@ def mkminim(grid, baseuri=None):
                     query = '?ro ore:aggregates [ rdf:type sch:' + rq['exists'] + '|sch1:' + rq["exists"] + ']'
                     rq['exists'] = query
                 else:
-                    if not rq['exists'][0].islower():
+                    if not rq['exists'][0].islower() and rq['exists'][0] != '?':
                         print "Property name should start with lowercase"
                         return 2, None
                     if requests.get('https://schema.org/%s' % rq['exists']).status_code is not 200:
