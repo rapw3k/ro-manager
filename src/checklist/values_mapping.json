@@ -1,0 +1,20 @@
+{
+  "foreach": {
+    "RO": "?ro rdf:type ro:ResearchObject, ore:Aggregation . FILTER NOT EXISTS { ?ro rdf:type ore:AggregatedResource } . FILTER NOT EXISTS { ?ro rdf:type roterms:WorkflowRunBundle  }",
+    "Resource": "?ro rdf:type ro:ResearchObject, ore:Aggregation . FILTER NOT EXISTS { ?ro rdf:type ore:AggregatedResource } . FILTER NOT EXISTS { ?ro rdf:type roterms:WorkflowRunBundle  } . ?ro ore:aggregates ?aggregated_resource . ?aggregated_resource rdf:type ro:Resource ."
+  },
+  "exists": {
+    "title": "?ro dcterms:title|sch:title|sch1:title ?rotitle",
+    "description": "?ro dcterms:description|sch:description|sch1:description ?rodescription",
+    "creator": "?ro dcterms:creator|sch:creator|sch1:creator ?rocreator",
+    "publisher": "?ro dcterms:publisher|sch:publisher|sch1:publisher ?ropublisher",
+    "subject": "?ro dcterms:subject|sch:about|sch1:about ?rosubject",
+    "keywords": "?ro swrc:keywords|sch:keywords|sch1:keywords ?rokeywords",
+    "authors": "?ro pav:authoredBy ?roauthors",
+    "contributors": "?ro pav:contributedBy ?rocontributors",
+    "geolocation": "?ro geo:hasGeometry ?rogeolocation",
+    "aggregates_resource": "?ro ore:aggregates [ rdf:type ro:Resource ]",
+    "aggregates_sketch": "?ro ore:aggregates [ rdf:type roterms:Sketch ]",
+    "resource_type": "?aggregated_resource rdf:type ?resource_type . FILTER( STR(?resource_type) NOT IN (STR(ro:Resource), STR(ore:AggregatedResource)) )"
+  }
+}

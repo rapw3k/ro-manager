@@ -84,3 +84,6 @@ Thumbs.db
 /src/samples/robase
 /src/ro_manager.egg-info
 .ro_config
+
+# Local files
+.idea

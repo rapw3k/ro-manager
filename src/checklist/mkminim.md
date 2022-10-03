@@ -43,11 +43,13 @@ The Research Object provides a context for the checklist evaluation, consisting 
 
 ## Spreadsheet format for describing checklists
 
-There is an example spreadsheet with checklist descriptions in GitHub at 
+There are two types of this format, the <b>old</b> one and <b>newer</b> much more user friendly.
+
+There is an example spreadsheet with <b>old</b> checklist descriptions in GitHub at 
 [mkminim-documentation-example](https://github.com/wf4ever/ro-catalogue/tree/master/v0.1/mkminim-documentation-example).
 We recommend downloading the [Excel spreadsheet](https://github.com/wf4ever/ro-catalogue/blob/master/v0.1/mkminim-documentation-example/TestMkMinim.xls) and viewing it in some suitable spreadsheet software.
 
-The checklist description is in several parts:
+<b>Old</b> checklist description is in several parts:
 
 * URI prefix definitions.
 * One or more Checklist definitions.
@@ -55,10 +57,14 @@ The checklist description is in several parts:
 * One or more rules, each of which is used to test a requirement.
 * End of Minim definition
 
+<b>New</b> checklist description is without the first <b>URI prefix definitions</b> section.
+
+
 Each part is initiated by a keyword that MUST appear in the first column of the spreadsheet, and MUST appear exactly as shown in the examples below.  I.e. <b>Prefixes:</b>, <b>Checklists:</b>, <b>Model:</b>, <b>Items:</b> and <b>Model:</b>.
 
-
 ## URI prefix definitions
+
+This section is not needed in the <b>new</b> checklist description format.
 
 These allow short [CURIE](http://www.w3.org/TR/curie/) forms of URIs to be used in SPARQL queries that are used by many checklist requirement rules.
 
@@ -95,7 +101,13 @@ If no match is found for the supplied paerameters in the Minim definition file, 
 |                    | {+targetro}   | <i>purpose-string</i> | <i>Model URI-reference</i> |
 |                    | {+targetro}   | <i>purpose-string</i> | <i>Model URI-reference</i> |
 
-The value in the <b>Target</b> column is a [URI template](http://tools.ietf.org/html/rfc6570), which is expended with variables `targetro` beingthe URI of the RO being evalutated, and `targetres` being the URI of the target resource specified in the evaluation request.  Thius specifying `{+targetro}` indicates that the corresponding Minim Model may be used when the target resource being evaluated is the research object itself.  (In some cases, it may be useful to associate specific resources with specific Minim Mopdels, but this may make the Minim description less generically applicable.)
+The value in the <b>Target</b> column is a [URI template](http://tools.ietf.org/html/rfc6570), which is expended with variables `targetro` beingthe URI of the RO being evalutated, and `targetres` being the URI of the target resource specified in the evaluation request.  Thus specifying `{+targetro}` indicates that the corresponding Minim Model may be used when the target resource being evaluated is the research object itself.  (In some cases, it may be useful to associate specific resources with specific Minim Mopdels, but this may make the Minim description less generically applicable.)
+
+<b>New</b> checklist description format does not include Target column:
+| <b>Checklists:</b> | <b>Purpose</b>        | <b>Model</b>               |
+|--------------------|-----------------------|----------------------------|
+|                    | <i>purpose-string</i> | <i>Model URI-reference</i> |
+|                    | <i>purpose-string</i> | <i>Model URI-reference</i> |
 
 
 ## Minim Model definition
@@ -143,9 +155,20 @@ Diagnostic message elements are common to all rule types:
 * Fail message
 * No-match message
 
+In ForEach and Exists field we can use a <b>new</b> mapping from SPARQL query to natural language word based on [schema](https://schema.org/) and other ontologies. Some special cases words are mapped in a [src/checklist/values_mapping.json](https://github.com/Pawlik02/ro-manager/blob/8d8715da41dbd884b7764133909e0f24f9229a11/src/checklist/values_mapping.json) file.
+
+Words not included in the file above create queries like that:
+aggregates_{Typex}
+
+`?ro ore:aggregates [ rdf:type sch:Typex|sch1:Typex ] , verifying that {Typex} exists in the schema.org context (starting with Upper case) `
+
+{propertyx}
+
+`?ro sch:{propertyx}|sch1:{propertyx} ?ro{propertyx}, verifying that {propertyx} exists in the schema.org context (starting with lower case)`
+
 ### Exists data rule
 
-This rule uses a SPARQL query pattern to test for the existence of some data in the Research Object annotations.  If the query is matched, the test succeeds, otherwise it fails.
+This rule uses a SPARQL query pattern or a mapped value to test for the existence of some data in the Research Object annotations.  If the query is matched, the test succeeds, otherwise it fails.
 
 | <b>Rule:</b> |   <i>req_id</i>    |                             |
 |--------------|--------------------|-----------------------------|
@@ -155,7 +178,7 @@ This rule uses a SPARQL query pattern to test for the existence of some data in 
 
 ### ForEach match Exists data
 
-This rule probes the RO annotation data with a SPARQL query pattern, and for each match found it tests to see if some related information is also present.  Query variables bound by each match of the initial <b>ForEach:</b> query are used in a corresponding <b>Exists:</b> query.
+This rule probes the RO annotation data with a SPARQL query pattern or a mapped value, and for each match found it tests to see if some related information is also present.  Query variables bound by each match of the initial <b>ForEach:</b> query are used in a corresponding <b>Exists:</b> query.
 
 | <b>Rule:</b> |  <i>req_id</i>  |                                  |
 |--------------|-----------------|----------------------------------|

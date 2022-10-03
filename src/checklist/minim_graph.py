@@ -14,6 +14,7 @@ from rocommand.ro_namespaces import RDF
 
 from iaeval.ro_minim import MINIM
 
+
 class Minim_graph(object):
     """
     Class to create abstraction for constructing a Minim graph.
@@ -24,7 +25,7 @@ class Minim_graph(object):
     """
 
     def __init__(self, base=None):
-        self._base    = base
+        self._base = base
         self._minimgr = rdflib.Graph()
         return
 
