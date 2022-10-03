@@ -78,7 +78,7 @@ def mkminim(grid, baseuri=None):
 
             if rq['exists'] in mapping['exists']:
                 rq['exists'] = mapping['exists'][rq['exists']]
-            elif (rq['exists'] not in mapping['exists']) and (rq['exists'][0] is not '?'):
+            elif (rq['exists'] not in mapping['exists']) and (rq['exists'][0] != '?'):
                 if 'aggregates_' in rq['exists']:
                     if not rq['exists'][11].isupper():
                         print "Type name should start with uppercase"
@@ -116,7 +116,7 @@ def mkminim(grid, baseuri=None):
         elif "exists" in rq:
             if rq['exists'] in mapping['exists']:
                 rq['exists'] = mapping['exists'][rq['exists']]
-            elif (rq['exists'] not in mapping['exists']) and (rq['exists'][0] is not '?'):
+            elif (rq['exists'] not in mapping['exists']) and (rq['exists'][0] != '?'):
                 if 'aggregates_' in rq['exists']:
                     if not rq['exists'][11].isupper():
                         print "Type name should start with uppercase"
