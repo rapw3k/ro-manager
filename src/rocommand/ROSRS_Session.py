@@ -535,6 +535,10 @@ class ROSRS_Session(HTTP_Session):
                 if (("biblio.ttl" in buri) and ("biblio" in purpose_val)): load=True
                 elif (("data.ttl" in buri) and ("data" in purpose_val)): load=True
                 elif (("tool.ttl" in buri) and ("tool" in purpose_val)): load=True
+                elif (("workflows.ttl" in buri) and ("workflow" in purpose_val)): load=True
+                elif (("workflows/main/main.ttl" in buri) and ("workflow" in purpose_val)): load=True
+                elif (("workflows/main/nested.ttl" in buri) and ("workflow" in purpose_val)): load=True	
+                elif (("workflows/main/components.ttl" in buri) and ("workflow" in purpose_val)): load=True	
                 elif ("all" in purpose_val): load=True
             if (load):
                 (status, reason, headers, curi, data) = self.doRequestRDFFollowRedirect(buri, 
