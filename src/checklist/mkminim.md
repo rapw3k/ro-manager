@@ -10,23 +10,23 @@ version 0.2.13 or later.
 
 To use `mkminim`, perform the following steps
 
-1. Create a checklist descriptrion in a spreadsheet program
+1. Create a checklist description in a spreadsheet program
    (this procedure has been tested using Excel, but other spreadsheet programmes should be usable).  
    The spreadsheet layout and structure for a checklist description is described below.  
    Also, there is a simple example checklist in GitHub at 
    [mkminim-documentation-example](https://github.com/wf4ever/ro-catalogue/tree/master/v0.1/mkminim-documentation-example).
-2. Export the spreadsheet data in CSV format.
-   The exported data should look like the CSV example in GitHub at 
+2. Then you can either export the spreadsheet data in CSV format, or just keep the XLS file, both options give the same results.
+   If you choose to export data into CSV the data should look like the CSV example in GitHub at 
    [mkminim-documentation-example](https://github.com/wf4ever/ro-catalogue/tree/master/v0.1/mkminim-documentation-example).
 3. Use the `mkminim` command thus:
 
-       	mkminim (filename).csv > (filename).ttl
+       	mkminim (filename).(file_extension) > (filename).ttl
 
    or
 
-       	mkminim -o xml (filename).csv > (filename).rdf
+       	mkminim -o xml (file_extension).(file_extension) > (filename).rdf
 
-   where `(filename).csv` is the name of the CSV file that is the saved spreadsheet.
+   where `(filename)` is the name of the file that is the saved spreadsheet and `(file_extension)` is .csv or .xls.
    If no errors are reported, the result of executing either of these commands is an RDF file
    that contains a Minim description corresponding to the supplied spreadsheet, which can be 
    supplied to the checklist evaluation service.
